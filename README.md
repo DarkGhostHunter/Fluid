@@ -26,6 +26,7 @@ Otherwise, you can just download this as a ZIP file and require it manually in y
 
 require_once 'path/to/fluid/Fluid.php';
 require_once 'path/to/fluid/Concerns/HasArrayAccess.php';
+require_once 'path/to/fluid/Concerns/HidesAttributes.php';
 
 // Optionally, these two together too
 require_once 'path/to/fluid/FluidFillable.php';
