@@ -31,13 +31,13 @@ class FluidFillableTest extends TestCase
         };
     }
 
-    public function testSetAttributes()
+    public function testFill()
     {
         $fluid = new class extends FluidFillable {
             protected $fillable = ['foo', 'baz'];
         };
 
-        $fluid->setAttributes(['foo' => 'bar', 'baz' => 'qux']);
+        $fluid->fill(['foo' => 'bar', 'baz' => 'qux']);
 
         $this->assertEquals('bar', $fluid->foo);
         $this->assertEquals('qux', $fluid->baz);
@@ -51,7 +51,7 @@ class FluidFillableTest extends TestCase
             protected $fillable = ['foo', 'baz'];
         };
 
-        $fluid->setAttributes(['foo' => 'bar', 'baz' => 'qux', 'alpha' => 'bravo']);
+        $fluid->fill(['foo' => 'bar', 'baz' => 'qux', 'alpha' => 'bravo']);
     }
 
     public function testSetAttribute()

@@ -19,7 +19,7 @@ class FluidFillable extends Fluid
      * @param array $attributes
      * @throws InvalidAttributeException
      */
-    public function setAttributes(array $attributes)
+    public function fill(array $attributes)
     {
         foreach ($attributes as $key => $attribute) {
             if (!in_array($key, $this->fillable)) {
