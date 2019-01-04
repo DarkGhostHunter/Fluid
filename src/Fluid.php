@@ -128,7 +128,7 @@ class Fluid implements ArrayAccess, JsonSerializable, Countable
         // If we're hiding attributes, then return those not hidden
         $array = $this->shouldHide && is_array($this->hidden)
             ? $this->except($this->hidden)
-            : $this->attributes;
+            : $this->attributes ?? [];
 
         // Use the getter, if its set, for each attribute
         foreach ($array as $key => $value) {
