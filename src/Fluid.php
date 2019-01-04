@@ -26,7 +26,19 @@ class Fluid implements ArrayAccess, JsonSerializable, Countable
      */
     public function __construct(array $attributes = [])
     {
-        $this->setAttributes($attributes);
+        $this->fill($attributes);
+    }
+
+    /**
+     * Fill the instance with attributes using setters
+     *
+     * @param array $attributes
+     */
+    public function fill(array $attributes)
+    {
+        foreach ($attributes as $key => $attribute) {
+            $this->setAttribute($key, $attribute);
+        }
     }
 
     /**

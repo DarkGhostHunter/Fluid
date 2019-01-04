@@ -287,7 +287,7 @@ class FluidTest extends TestCase
         $fluid = $fluid::make(['foo' => 'bar', 'baz' => 'qux']);
 
         $this->assertInstanceOf(Fluid::class, $fluid);
-        $this->assertEquals(['foo' => 'bar', 'baz' => 'qux'], $fluid->toArray());
+        $this->assertEquals(['foo' => 'notFoo', 'baz' => 'qux'], $fluid->toArray());
     }
 
     public function testMakeRaw()
