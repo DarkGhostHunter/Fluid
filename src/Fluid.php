@@ -9,6 +9,8 @@ use JsonSerializable;
 
 class Fluid implements ArrayAccess, JsonSerializable, Countable
 {
+    use Concerns\HasArrayAccess;
+
     /**
      * Attributes this class holds
      *
@@ -254,60 +256,6 @@ class Fluid implements ArrayAccess, JsonSerializable, Countable
         $this->offsetUnset($name);
     }
 
-    /**
-     * Specify data which should be serialized to JSON
-     *
-     * @return array
-     */
-    public function jsonSerialize()
-    {
-        return $this->toArray();
-    }
-
-    /**
-     * Whether a offset exists
-     *
-     * @param mixed $offset
-     * @return boolean
-     */
-    public function offsetExists($offset)
-    {
-        return isset($this->attributes[$offset]);
-    }
-
-    /**
-     * Offset to retrieve
-     *
-     * @param mixed $offset
-     * @return mixed
-     */
-    public function offsetGet($offset)
-    {
-        return $this->getAttribute($offset);
-    }
-
-    /**
-     * Offset to set
-     *
-     * @param mixed
-     * @param mixed
-     * @return void
-     */
-    public function offsetSet($offset, $value)
-    {
-        $this->setAttribute($offset, $value);
-    }
-
-    /**
-     * Offset to unset
-     *
-     * @param mixed $offset
-     * @return void
-     */
-    public function offsetUnset($offset)
-    {
-        unset($this->attributes[$offset]);
-    }
 
     /**
      * Dynamically set an attribute as a fluent method
@@ -363,15 +311,5 @@ class Fluid implements ArrayAccess, JsonSerializable, Countable
     public static function fromJson(string $json)
     {
         return static::make(json_decode($json, true));
-    }
-
-    /**
-     * Count elements of an object
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return count($this->attributes);
     }
 }
