@@ -57,6 +57,13 @@ class FluidTest extends TestCase
         $this->assertEquals('callable', $fluid->getAttribute('undefinedKey', function () {
             return 'callable';
         }));
+
+        $fluid->setAttribute('zero', 0);
+        $this->assertEquals(0, $fluid->zero);
+        $fluid->setAttribute('emptyArray', []);
+        $this->assertEquals([], $fluid->emptyArray);
+        $fluid->setAttribute('emptyString', '');
+        $this->assertEquals('', $fluid->emptyString);
     }
 
     public function testSetAndGetHidden()
@@ -134,6 +141,11 @@ class FluidTest extends TestCase
         $fluid = new Fluid($array = ['foo' => 'bar', 'baz' => 'qux']);
 
         $this->assertEquals($array, $fluid->toArray());
+
+        $fluid = new Fluid();
+
+        $this->assertIsArray($fluid->toArray());
+        $this->assertEmpty($fluid->toArray());
     }
 
     public function testToArrayHidesAttributes()
