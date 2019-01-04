@@ -74,7 +74,7 @@ class Fluid implements ArrayAccess, JsonSerializable, Countable
             return $this->{$method}();
         }
 
-        if ($value = $this->attributes[$key] ?? null) return $value;
+        if (($value = $this->attributes[$key]) === null) return $value;
 
         return is_callable($default) ? $default() : $default;
     }
