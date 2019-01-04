@@ -1,5 +1,5 @@
 {
-  "name": "darkghosthunter/fluent",
+  "name": "darkghosthunter/fluid",
   "description": "Fluent utility class based on Laravel's Fluent class",
   "minimum-stability": "dev",
   "license": "MIT",
