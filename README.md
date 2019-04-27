@@ -9,7 +9,7 @@ Aaron Burden - Unsplash (UL) #Kp9z6zcUfGw](https://images.unsplash.com/photo-147
 
 A flexible class based on the famous Laravel's [Fluent](https://github.com/Illuminate/Support/blob/master/Fluent.php) and [Eloquent Model](https://github.com/laravel/framework/blob/master/src/Illuminate/Database/Eloquent/Model.php) class.
 
-Fluid will allow you to flexible manipulate a class as a bag of properties (or array keys), and allow simple serialization.
+Fluid will allow you to flexible manipulate a class as a bag of properties (or array keys), and allow simple serialization while hiding sensible data from your users.
 
 ## Installation
 
@@ -27,6 +27,7 @@ Otherwise, you can just download this as a ZIP file and require it manually in y
 require_once 'path/to/fluid/Fluid.php';
 require_once 'path/to/fluid/Concerns/HasArrayAccess.php';
 require_once 'path/to/fluid/Concerns/HidesAttributes.php';
+require_once 'path/to/fluid/Concerns/HasInstanceHelpers.php';
 
 // Optionally, these two together too
 require_once 'path/to/fluid/FluidFillable.php';
@@ -37,7 +38,7 @@ require_once 'path/to/fluid/Exceptions/InvalidAttributeException.php';
 
 The Fluid class is a class that can be accessed as a normal object or array. It can be serialized to an array, string or JSON.
 
-You can intance Fluid like the normal way, or just using `make()`:
+You can instance Fluid like the normal way, or just using `make()`:
 
 ```php
 <?php
@@ -60,15 +61,56 @@ You can also use `fromJson()` if you need to make an instance from a JSON string
 
 use DarkGhostHunter\Fluid\Fluid;
 
-$fluid = new Fluid::fromJson('"{"foo":"bar"}"');
+$fluid = Fluid::fromJson('"{"foo":"bar"}"');
 
 echo $fluid->foo; // 'bar'
 ```
- 
+
+To be totally safe to use, these static helper methods will return your class that extended the `Fluid` instead of the base class. So using `Oil::make()` will return an instance of `Oil`. 
+
+```php
+<?php
+
+use DarkGhostHunter\Fluid\Fluid;
+
+class Water extends Fluid
+{
+    // ...
+}
+
+$water = Water::make();
+
+get_class($water); // 'Water'
+```
+
+#### Override the static helpers
+
+Fluid uses the magic of `__callStatic` to create a new instance. In previous versions you could not override the static methods with your own logic, but now you can:
+
+```php
+<?php
+
+use DarkGhostHunter\Fluid\Fluid;
+
+class Water extends Fluid
+{
+    /**
+     * My Custom "Make" static method
+     * 
+     * @return \DarkGhostHunter\Fluid\Fluid|string
+     */
+    public static function make()
+    {
+        return 'My Custom Logic';
+    }
+}
+
+echo Water::make(); // 'My Custom Logic'
+```
 
 ### Attributes
 
-Every attribute lies inside a protected array called `$attributes`, and each of one can be set as a property or an array.
+Every attribute lies inside a protected array called `$attributes`, and each of these can be set as it was a property or an array.
 
 ```php
 <?php
@@ -78,19 +120,22 @@ use DarkGhostHunter\Fluid\Fluid;
 $fluid = new Fluid(['foo' => 'bar']);
 
 $fluid->foo = 'notBar';
-
-echo $fluid->foo; // 'notBar';
-
 $fluid['baz'] = 'qux';
 
+echo $fluid->foo; // 'notBar';
 echo $fluid['baz']; // 'qux'
+
+echo $fluid['thisAttributeDoesNotExists']; // null
+echo $fluid->thisAlsoDoesNotExists; // null
 ```
+
+For convenience, if a property or array key doesn't exists it will return null.
 
 ### Serializing
 
 Serializing means taking the class to another representation, like an array or string.
 
-To serialize as an array, use the `toArray()` method. Since there is no magic for `(array)$fluid`, using the latter will serialize every property, so you would want to avoid that.
+To serialize as an array, use the `toArray()` method.
 
 ```php
 <?php 
@@ -104,7 +149,9 @@ $array = $fluid->toArray();
 echo $fluid['foo']; // 'bar'
 ```
 
-Serializing to a string will output JSON, as with `toJson()`
+> Since there is no magic for using `(array)$fluid`, the latter will serialize every property, so to avoid that.
+
+Serializing to a string will output JSON, as with the `toJson()` method.
 
 ```php
 <?php 
@@ -120,11 +167,43 @@ echo $json; // "{"foo":"bar"}"
 echo $moreJson; // "{"foo":"bar"}"
 ```
 
-### Hidding
+### Hiding attributes from serialization
 
-Sometimes is handy to hide attributes from serialization, like application keys, API secrets or certificate locations.
+Sometimes is handy to hide attributes from serialization, like application keys, API secrets, user credentials or certificate locations.
 
-You can turn this on using `shouldHide()` methd, and set the attributes to hide in `$hidden` when extending Fluid or using `setHidden()` afterwards.
+You can turn this on using `shouldHide()` method, or if you're extending `Fluid`, setting `$shouldHide` to false.
+
+```php
+<?php
+
+use DarkGhostHunter\Fluid\Fluid;
+
+class Water extends Fluid
+{
+    /**
+     * Attributes to hide on serialization
+     *
+     * @var array
+     */
+    protected $hidden;
+    
+    /**
+     * Should hide attributes on serialization
+     *
+     * @var bool
+     */
+    protected $shouldHide = true;
+    
+    // ...
+}
+
+$fluid = new Fluid;
+
+$fluid->shouldHide();
+
+```
+ 
+Set the attributes to hide inside the `$hidden` property. Alternatively, you can use the  `setHidden()` method after is instanced. 
 
 ```php
 <?php 
@@ -138,16 +217,17 @@ $fluid->setHidden(['baz']);
 $fluid->shouldHide();
 
 echo $fluid->baz; // 'qux'
+echo $fluid['baz']; // 'qux'
 
-print_r($fluid->toArray()); // ['foo' => 'bar']
+print_r($fluid->toArray()); // Array( ['foo' => 'bar'] )
 echo (string)$fluid; // "{"foo":"bar"}"
 ```
 
 ### Fillable
 
-Sometimes you want to ensure the user doesn't fill anything more than some predetermined attributes. You can use the `FluentFillable` class to enforce this.
+Sometimes you want to ensure the user doesn't fill anything more than some predetermined attributes. You can use the `FluidFillable` class to enforce this.
 
-You can put the fillable attributes in the `$fillable` array or use `setFillable()` afterwards.
+You can put the attributes allowed to be set in the `$fillable` array or use `setFillable()` afterwards.
 
 ```php
 <?php
@@ -163,11 +243,13 @@ $fluid->alpha = 'bravo';
 /*
  * [!] DarkGhostHunter\Fluid\Exceptions\InvalidAttributeException
  * 
- * Attribute [foo] cannot be set
+ * Attribute [foo] in not set as fillable in FluidFillable.
  */
 ```
 
-The user will get a `InvalidAttributeException` when trying to set an attribute which is not fillable.
+The user will get a `InvalidAttributeException` when trying to set an attribute which is not fillable in the class.
+
+You can use this to force developers to only allow certain attributes inside an instance, allowing you to displace any filtering logic once the instance is processed in your application.
 
 ## License
 
