@@ -143,7 +143,7 @@ class Fluid implements ArrayAccess, JsonSerializable, Countable
     /**
      * Returns a JSON representation of the instance
      *
-     * @return false|string
+     * @return string
      */
     public function toJson()
     {

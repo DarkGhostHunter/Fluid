@@ -39,7 +39,7 @@ trait HidesAttributes
     }
 
     /**
-     * If this in instance should hide attributes on serialization
+     * If this instance should hide attributes on serialization
      *
      * @return bool
      */
@@ -49,7 +49,7 @@ trait HidesAttributes
     }
 
     /**
-     * Should hide the attributes on serialization
+     * If this instance should hide the attributes on serialization
      *
      * @param bool $shouldHide
      */
