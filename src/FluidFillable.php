@@ -22,8 +22,8 @@ class FluidFillable extends Fluid
     public function fill(array $attributes)
     {
         foreach ($attributes as $key => $attribute) {
-            if (!in_array($key, $this->fillable)) {
-                throw new InvalidAttributeException($key);
+            if (! in_array($key, $this->fillable, true)) {
+                throw new InvalidAttributeException($key, $this);
             }
         }
 
@@ -41,7 +41,7 @@ class FluidFillable extends Fluid
     public function setAttribute(string $key, $value)
     {
         if (! in_array($key, $this->fillable, true)) {
-            throw new InvalidAttributeException($key);
+            throw new InvalidAttributeException($key, $this);
         }
 
         parent::setAttribute($key, $value);

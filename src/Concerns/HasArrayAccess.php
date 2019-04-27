@@ -4,7 +4,6 @@ namespace DarkGhostHunter\Fluid\Concerns;
 
 trait HasArrayAccess
 {
-
     /**
      * Specify data which should be serialized to JSON
      *
