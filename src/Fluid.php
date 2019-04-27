@@ -7,6 +7,14 @@ use BadMethodCallException;
 use Countable;
 use JsonSerializable;
 
+/**
+ * Class Fluid
+ *
+ * @method static static make(array $attributes = [])
+ * @method static static makeRaw(array $attributes = [])
+ * @method static static fromJson(string $json)
+ * @package DarkGhostHunter\Fluid
+ */
 class Fluid implements ArrayAccess, JsonSerializable, Countable
 {
     use Concerns\HasArrayAccess,
@@ -143,7 +151,7 @@ class Fluid implements ArrayAccess, JsonSerializable, Countable
     /**
      * Returns a JSON representation of the instance
      *
-     * @return false|string
+     * @return string
      */
     public function toJson()
     {
@@ -226,39 +234,20 @@ class Fluid implements ArrayAccess, JsonSerializable, Countable
     }
 
     /**
-     * Create a new Fluid instance
+     * Dynamically create an instance using the Instance Helper
      *
-     * @param array $attributes
-     * @return Fluid
+     * @param $name
+     * @param $arguments
+     * @return mixed
      */
-    public static function make(array $attributes = [])
+    public static function __callStatic($name, $arguments)
     {
-        return new static($attributes);
-    }
+        if (in_array($name, ['make', 'makeRaw', 'fromJson'])) {
+            return FluidInstanceHelper::{$name}(static::class, ...$arguments);
+        }
 
-    /**
-     * Create a new Fluid instance with raw attributes
-     *
-     * @param array $attributes
-     * @return Fluid
-     */
-    public static function makeRaw(array $attributes = [])
-    {
-        $fluent = new static;
-
-        $fluent->setAttributes($attributes);
-
-        return $fluent;
-    }
-
-    /**
-     * Create a new Fluid instance from a JSON string
-     *
-     * @param string $json
-     * @return Fluid
-     */
-    public static function fromJson(string $json)
-    {
-        return static::make(json_decode($json, true));
+        throw new BadMethodCallException(
+            'Error : Call to undefined method ' . static::class . '::' . $name
+        );
     }
 }

@@ -2,15 +2,16 @@
 
 namespace DarkGhostHunter\Fluid\Exceptions;
 
+use DarkGhostHunter\Fluid\Fluid;
 use Exception;
-use Throwable;
 
 class InvalidAttributeException extends Exception
 {
-    public function __construct(string $message = "", int $code = 0, Throwable $previous = null)
+    public function __construct(string $attribute, Fluid $instance)
     {
-        $message = "Attribute [$message] cannot be set.";
+        $this->message = "Attribute [$attribute] in not set as fillable in " .
+            substr(strrchr(get_class($instance), "\\"), 1) . '.';
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct();
     }
 }
