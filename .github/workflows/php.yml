@@ -35,9 +35,7 @@ jobs:
         restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
     - name: Install dependencies
-      run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-progress --no-update
-          composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress --no-suggest
+      run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress --no-suggest
 
     - name: Run Tests
       run: composer run-script test
