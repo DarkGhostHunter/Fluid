@@ -1,9 +1,7 @@
-![
-Aaron Burden - Unsplash (UL) #Kp9z6zcUfGw](https://images.unsplash.com/photo-1471879832106-c7ab9e0cee23?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1280&h=400&q=80)
+![Aaron Burden - Unsplash (UL) #Kp9z6zcUfGw](https://images.unsplash.com/photo-1471879832106-c7ab9e0cee23?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1280&h=400&q=80)
 
 [![Latest Stable Version](https://poser.pugx.org/darkghosthunter/fluid/v/stable)](https://packagist.org/packages/darkghosthunter/fluid) [![License](https://poser.pugx.org/darkghosthunter/fluid/license)](https://packagist.org/packages/darkghosthunter/fluid)
-![](https://img.shields.io/packagist/php-v/darkghosthunter/fluid.svg) [![Build Status](https://travis-ci.com/DarkGhostHunter/Fluid.svg?branch=master)](https://travis-ci.com/DarkGhostHunter/Fluid) [![Coverage Status](https://coveralls.io/repos/github/DarkGhostHunter/Fluid/badge.svg?branch=master)](https://coveralls.io/github/DarkGhostHunter/Fluid?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/75d03e2ee12a047b8a02/maintainability)](https://codeclimate.com/github/DarkGhostHunter/Fluid/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/75d03e2ee12a047b8a02/test_coverage)](https://codeclimate.com/github/DarkGhostHunter/Fluid/test_coverage)
-
+![](https://img.shields.io/packagist/php-v/darkghosthunter/fluid.svg) [![Coverage Status](https://coveralls.io/repos/github/DarkGhostHunter/Fluid/badge.svg?branch=master)](https://coveralls.io/github/DarkGhostHunter/Fluid?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/75d03e2ee12a047b8a02/maintainability)](https://codeclimate.com/github/DarkGhostHunter/Fluid/maintainability)
 
 # Fluid
 
